@@ -1,10 +1,14 @@
 // @desc reusable top Navbar component
 import Link from 'next/link'
+import { useContext } from 'react'
+import { UserContext } from '../lib/context'
+import { auth } from '../lib/firebase';
+
+
 
 export default function Navbar() {
-  // state(will update)
-  const user = null;
-  const username = null;
+  // state(consume the context
+  const { user, username } = useContext(UserContext);
   
   return (
     <nav className="navbar">
@@ -15,17 +19,20 @@ export default function Navbar() {
           </Link>
         </li>
          
-        {/* user is signed in and has username, then render write post, and userprofile*/}
+        {/* user is signed in and has username, then render signOut button, write post button, and userprofile button*/}
         {username && (
-          <>
+          <>  
             <li className="push-left">
+              <button onClick={() => auth.signOut()}>Sign Out</button>
+            </li>
+            <li >
               <Link href="/admin">
                 <button className="btn-blue">Write Post</button>
               </Link>
             </li>
             <li>
               <Link href={`/${username}`}>
-                <img src={user?.photoUrl}/>
+                <img src={user?.photoUrl || `/hacker.png`}/>
               </Link>
             </li>
           </>
